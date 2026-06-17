@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Азбука VPN — VPN для самых маленьких</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8fafc;
+            color: #0b1a2e;
+            line-height: 1.7;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        /* ----- Шапка (единый стиль) ----- */
+        .header {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 1.5rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .site-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: #0b1a2e;
+        }
+
+        .site-title span {
+            background: #0b1a2e;
+            color: #ffffff;
+            padding: 0.1rem 0.6rem;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-right: 4px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a {
+            color: #1e3a5f;
+            text-decoration: none;
+            padding: 0.3rem 0;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            border-bottom-color: #0b1a2e;
+        }
+
+        .nav-links a.active {
+            border-bottom-color: #0b1a2e;
+            color: #0b1a2e;
+        }
+
+        /* ----- Заголовки ----- */
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-desc {
+            font-size: 1.2rem;
+            color: #334e68;
+            margin-bottom: 2.5rem;
+            border-left: 4px solid #94a3b8;
+            padding-left: 1.5rem;
+        }
+
+        /* ----- Навигация по буквам (якоря) ----- */
+        .letter-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2.5rem;
+            justify-content: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        .letter-nav a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.4rem;
+            height: 2.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #1e3a5f;
+            text-decoration: none;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+
+        .letter-nav a:hover {
+            background: #0b1a2e;
+            color: #ffffff;
+        }
+
+        .letter-nav a.empty {
+            color: #cbd5e1;
+            pointer-events: none;
+        }
+
+        /* ----- Блок с терминами для одной буквы ----- */
+        .letter-section {
+            margin-bottom: 3rem;
+        }
+
+        .letter-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            border-bottom: 3px solid #0b1a2e;
+            padding-bottom: 0.2rem;
+            margin-bottom: 1.5rem;
+            color: #0b1a2e;
+        }
+
+        /* ----- Карточка термина ----- */
+        .term-card {
+            background: #ffffff;
+            border: 1px solid #e9edf2;
+            border-radius: 12px;
+            padding: 1.2rem 1.8rem;
+            margin-bottom: 1rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .term-card:hover {
+            border-color: #b9c8db;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .term-card strong {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #0b1a2e;
+            display: inline-block;
+            min-width: 4.5rem;
+        }
+
+        .term-card .definition {
+            color: #1e293b;
+        }
+
+        .term-card .example {
+            display: block;
+            margin-top: 0.3rem;
+            font-size: 0.9rem;
+            color: #64748b;
+            background: #f1f4f9;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            border-left: 3px solid #94a3b8;
+        }
+
+        /* ----- Подвал ----- */
+        .footer {
+            margin-top: 4rem;
+            padding-top: 1.8rem;
+            border-top: 1px solid #e2e8f0;
+            color: #64748b;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        /* ----- Адаптивность ----- */
+        @media (max-width: 700px) {
+            body {
+                padding: 1rem;
+            }
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .nav-links {
+                gap: 1.2rem;
+                flex-wrap: wrap;
+            }
+            h1 {
+                font-size: 2.1rem;
+            }
+            .page-desc {
+                font-size: 1rem;
+                padding-left: 1rem;
+            }
+            .letter-nav {
+                padding: 0.8rem 0.6rem;
+                gap: 0.2rem;
+            }
+            .letter-nav a {
+                width: 2rem;
+                height: 2rem;
+                font-size: 0.8rem;
+            }
+            .letter-title {
+                font-size: 2rem;
+            }
+            .term-card {
+                padding: 1rem 1.2rem;
+            }
+            .term-card strong {
+                display: block;
+                margin-bottom: 0.2rem;
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ШАПКА -->
+    <header class="header">
+        <div class="site-title">
+            <span>VPN</span> для самых маленьких
+        </div>
+        <nav class="nav-links">
+            <a href="index.html">Главная</a>
+            <a href="alphabet.html" class="active">Азбука</a>
+            <a href="protocols.html">Протоколы</a>
+            <a href="setup.html">Настройка</a>
+        </nav>
+    </header>
+
+    <!-- ЗАГОЛОВОК -->
+    <h1>Азбука VPN</h1>
+    <div class="page-desc">
+        Все термины от «А» до «Я», которые вам встретятся. Без заумного жаргона — 
+        только то, что реально нужно знать.
+    </div>
+
+    <!-- НАВИГАЦИЯ ПО БУКВАМ -->
+    <div class="letter-nav" id="top">
+        <a href="#A">А</a>
+        <a href="#B">Б</a>
+        <a href="#V">В</a>
+        <a href="#G">Г</a>
+        <a href="#D">Д</a>
+        <a href="#E">Е</a>
+        <a href="#Z">З</a>
+        <a href="#I">И</a>
+        <a href="#K">К</a>
+        <a href="#L">Л</a>
+        <a href="#M">М</a>
+        <a href="#N">Н</a>
+        <a href="#O">О</a>
+        <a href="#P">П</a>
+        <a href="#R">Р</a>
+        <a href="#S">С</a>
+        <a href="#T">Т</a>
+        <a href="#U">У</a>
+        <a href="#F">Ф</a>
+        <a href="#H">Х</a>
+        <a href="#C">Ц</a>
+        <a href="#Ch">Ч</a>
+        <a href="#Sh">Ш</a>
+        <a href="#E_">Э</a>
+        <a href="#Yu">Ю</a>
+        <a href="#Ya">Я</a>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- БУКВА А -->
+    <!-- ============================================================ -->
+    <div class="letter-section" id="A">
+        <h2 class="letter-title">А</h2>
+
+        <div class="term-card">
+            <strong>Анонимность</strong>
+            <span class="definition">— состояние, когда ваши действия в интернете нельзя связать с вашей реальной личностью. VPN помогает повысить анонимность, скрывая ваш IP-адрес.</span>
+        </div>
+
+        <div class="term-card">
+            <strong>API</strong>
+            <span class="definition">— интерфейс для программного взаимодействия. В контексте VPN — способ, которым ваш клиент общается с сервером для получения конфигураций.</span>
+            <span class="example">Пример: вы вводите подписку (ссылку) в клиенте, и он через API загружает список серверов.</span>
+        </div>
+
+        <div class="term-card">
+            <strong>Аутентификация</strong>
+            <span class="definition">— проверка подлинности. Процесс, при котором сервер убеждается, что подключаетесь именно вы, а не злоумышленник. Обычно через логин/пароль, ключи или сертификаты.</span>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- БУКВА Б -->
+    <!-- ============================================================ -->
+    <div class="letter-section" id="B">
+        <h2 class="letter-title">Б</h2>
+
+        <div class="term-card">
+            <strong>Блокировка (гео-блокировка)</strong>
+            <span class="definition">— ограничение доступа к контенту в зависимости от вашего местоположения. Например, некоторые фильмы доступны только в США. VPN помогает её обойти.</span>
+        </div>
+
+        <div class="term-card">
+            <strong>Брешь (утечка)</strong>
+            <span class="definition">— ситуация, когда VPN не защищает весь ваш трафик, и часть данных уходит через обычное интернет-соединение (например, DNS-запросы). Об этом важно знать (см. «DNS-утечка»).</span>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- БУКВА В -->
+    <!-- ============================================================ -->
+    <div class="letter-section" id="V">
+        <h2 class="letter-title">В</h2>
+
+        <div class="term-card">
+            <strong>VPN (Virtual Private Network)</strong>
+            <span class="definition">— виртуальная частная сеть. Технология, которая создаёт зашифрованный «туннель» между вашим устройством и интернетом, скрывая ваш IP-адрес и защищая данные.</span>
+            <span class="example">Пример: вы подключаетесь к VPN-серверу в другой стране, и все сайты «думают», что вы находитесь там.</span>
+        </div>
+
+        <div class="term-card">
+            <strong>Входной узел (Entry Node)</strong>
+            <span class="definition">— первый сервер в цепочке (например, в сетях типа Tor), через который проходит ваш трафик. В обычном VPN это просто сам VPN-сервер.</span>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- БУКВА Г -->
+    <!-- ============================================================ -->
+    <div class="letter-section" id="G">
+        <h2 class="letter-title">Г</h2>
+
+        <div class="term-card">
+            <strong>GeoIP</strong>
+            <span class="definition">— технология определения вашего географического местоположения по IP-адресу. Именно её обманывает VPN, подставляя IP-адрес сервера вместо вашего.</span>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- БУКВА Д -->
+    <!-- ============================================================ -->
+    <div class="letter-section" id="D">
+        <h2 class="letter-title">Д</h2>
+
+        <div class="term-card">
+            <strong>DNS (Domain Name System)</strong>
+            <span class="definition">— система, которая превращает понятные нам адреса (например, google.com) в цифровые IP-адреса. VPN должен защищать и DNS-запросы, чтобы никто не знал, какие сайты вы посещаете.</span>
+        </div>
+
+        <div class="term-card">
+            <strong>DNS-утечка</strong>
+            <span class="definition">— ситуация, когда ваш компьютер отправляет DNS-запросы через обычного провайдера, а не через VPN. Это позволяет провайдеру видеть, какие сайты вы открываете, даже если сам трафик зашифрован.</span>
+            <span class="example">Пример: вы подключены к VPN, но в настройках стоит DNS провайдера — тогда ваши запросы видны вашему интернет-провайдеру.</span>
+        </div>
+
+        <div class="term-card">
+            <strong>DPI (Deep Packet Inspection)</strong>
+            <span class="definition">— глубокий анализ пакетов. Технология, которую используют провайдеры и государства для анализа вашего трафика. DPI может определить, что вы используете VPN, даже если трафик зашифрован (по характерным признакам).</span>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- БУКВА З -->
+    <!-- ============================================================ -->
+    <div class="letter-section" id="Z">
+        <h2 class="letter-title">З</h2>
+
+        <div class="term-card">
+            <strong>Защита от утечек (Leak Protection)</strong>
+            <span class="definition">— функция VPN, которая блокирует интернет-трафик, если соединение с VPN-сервером разрывается, чтобы ваши данные случайно не ушли через незащищённое соединение.</span>
+        </div>
+
+        <div class="term-card">
+            <strong>Закрытый ключ (Private Key)</strong>
+            <span class="definition">— секретная часть криптографической пары. Используется для расшифровки данных и аутентификации. Никогда не передаётся никому и хранится только на вашем устройстве.</span>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- БУКВА И -->
+    <!-- ============================================================ -->
+    <div class="letter-section" id="I">
+        <h2 class="letter-title">И</h2>
+
+        <div class="term-card">
+            <strong>IP-адрес</strong>
+            <span class="definition">— уникальный цифровой идентификатор вашего устройства в интернете. Похож на почтовый адрес. VPN скрывает ваш реальный IP и подставляет IP-адрес сервера.</span>
+            <span class="example">Пример: ваш реальный IP — 85.123.45.67 (Россия), а через VPN становится 45.33.22.11 (Нидерланды).</span>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- БУКВА К -->
+    <!-- ============================================================ -->
+    <div class="letter-section" id="K">
+        <h2 class="letter-title">К</h2>
+
+        <div class="term-card">
+            <strong>Kill Switch</strong>
+            <span class="definition">— «аварийный выключатель». Если VPN-соединение внезапно обрывается, Kill Switch мгновенно отключает весь интернет на вашем устройстве, чтобы ваши данные не «утекли» через незащищённое соединение.</span>
+        </div>
+
+        <div class="term-card">
+            <strong>Клиент (VPN-клиент)</strong>
+            <span class="definition">— программа на вашем устройстве, которая подключается к VPN-серверу. Например, Nekobox, v2rayNG, Hiddify, OpenVPN GUI.</span>
+        </div>
+
+        <div class="term-card">
+            <strong>Конфигурация (Config)</strong>
+            <span class="definition">— файл или набор настроек (адрес сервера, протокол, ключи), которые нужны клиенту, чтобы подключиться к VPN. Часто выглядит как ссылка-подписка или файл .json / .ovpn.</span>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- БУКВА Л -->
+    <!-- ============================================================ -->
+    <div class="letter-section" id="L">
+        <h2 class="letter-title">Л</h2>
+
+        <div class="term-card">
+            <strong>Латентность (Пинг)</strong>
+            <span class="definition">— время, за которое пакет данных доходит от вашего устройства до сервера и обратно. Измеряется в миллисекундах (мс). Чем ниже пинг, тем быстрее отклик — важно для игр и видеозвонков.</span>
+        </div>
+
+        <div class="term-card">
+            <strong>Логи (Журналы)</strong>
+            <span class="definition">— записи о ваших действиях, которые может вести VPN-провайдер. Безлоговый (no-logs) VPN означает, что провайдер не хранит информацию о том, какие сайты вы посещали.</span>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- БУКВА М -->
+    <!-- ============================================================ -->
+    <div class="letter-section" id="M">
+        <h2 class="letter-title">М</h2>
+
+        <div class="term-card">
+            <strong>Маскировка (Obfuscation)</strong>
+            <span class="definition">— технология, которая делает VPN-трафик похожим на обычный интернет-трафик (например, HTTPS), чтобы его было сложнее обнаружить и заблокировать. Используется в протоколах типа Trojan и VLESS+Reality.</span>
+        </div>
+
+        <div class="term-card">
+            <strong>MTU (Maximum Transmission Unit)</strong>
+            <span class="definition">— максимальный размер пакета данных, который может пройти через сеть. Если MTU настроен неправильно, могут быть проблемы с загрузкой сайтов. В хороших VPN-клиентах этот параметр настраивается автоматически.</span>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- БУКВА Н -->
+    <!-- ============================================================ -->
+    <div class="letter-section" id="N">
+        <h2 class="letter-title">Н</h2>
+
+        <div class="term-card">
+            <strong>Нагрузка на сервер (Server Load)</strong>
+            <span class="definition">— количество пользователей, одновременно подключенных к одному VPN-серверу. Чем выше нагрузка, тем ниже скорость. Хорошие провайдеры показывают нагрузку в процентах.</span>
+        </div>
+
+        <div class="term-card">
+            <strong>No-Logs</strong>
+            <span class="definition">— политика отсутствия журналов. Это значит, что VPN-провайдер не хранит информацию о ваших действиях (какие сайты вы посещали, когда подключались, сколько трафика использовали).</span>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- БУКВА О -->
+    <!-- ============================================================ -->
+    <div class="letter-section" id="O">
+        <h2 class="letter-title">О</h2>
+
+        <div class="term-card">
+            <strong>Обход блокировки</strong>
+            <span class="definition">— основная задача многих VPN. Это использование технических приёмов (маскировка, изменение протоколов), чтобы обойти государственные или корпоративные фильтры и получить доступ к заблокированным сайтам.</span>
+        </div>
+
+        <div class="term-card">
+            <strong>Открытый ключ (Public Key)</strong>
+            <span class="definition">— часть криптографической пары, которая доступна всем. Её используют для шифрования данных, которые потом может расшифровать только владелец закрытого ключа.</span>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- БУКВА П -->
+    <!-- ============================================================ -->
+    <div class="letter-section" id="P">
+        <h2 class="letter-title">П</h2>
+
+        <div class="term-card">
+            <strong>Прокси-сервер</strong>
+            <span class="definition">— посредник между вами и интернетом. В отличие от VPN, прокси обычно не шифрует весь трафик и не создаёт виртуальную сеть. Shadowsocks — это прокси с шифрованием.</span>
+        </div>
+
+        <div class="term-card">
+            <strong>Протокол</strong>
+            <span class="definition">— набор правил и алгоритмов, по которым ваш клиент общается с VPN-сервером. Разные протоколы обеспечивают разную скорость, безопасность и устойчивость к блокировкам.</span>
+            <span class="example">Примеры: VLESS, VMess, Trojan, OpenVPN, WireGuard, IKEv2.</span>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- БУКВА Р -->
+    <!-- ============================================================ -->
+    <div class="letter-section" id="R">
+        <h2 class="letter-title">Р</h2>
+
+        <div class="term-card">
+            <strong>Reality</strong>
+            <span class="definition">— современная технология маскировки для протокола VLESS. Она делает ваш трафик неотличимым от обычного HTTPS, при этом не требует покупки SSL-сертификата. Очень устойчива к DPI.</span>
+        </div>
+
+        <div class="term-card">
+            <strong>Роутинг (Маршрутизация)</strong>
+            <span class="definition">— процесс направления вашего интернет-трафика. Сплит-туннелирование (Split Tunneling) позволяет отправлять только часть трафика через VPN (например, только браузер), а остальное — напрямую.</span>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- БУКВА С -->
+    <!-- ============================================================ -->
+    <div class="letter-section" id="S">
+        <h2 class="letter-title">С</h2>
+
+        <div class="term-card">
+            <strong>Сертификат (SSL/TLS)</strong>
+            <span class="definition">— цифровой документ, который подтверждает подлинность сайта или сервера. Используется для шифрования соединения. В некоторых протоколах (Trojan) обязателен.</span>
+        </div>
+
+        <div class="term-card">
+            <strong>Сплит-туннелирование (Split Tunneling)</strong>
+            <span class="definition">— функция, которая позволяет направлять через VPN только часть трафика (например, браузер или отдельные приложения), а остальное — через обычное соединение. Удобно для экономии скорости.</span>
+        </div>
+
+        <div class="term-card">
+            <strong>Субъект (Jurisdiction)</strong>
+            <span class="definition">— юрисдикция, в которой зарегистрирован VPN-провайдер. От этого зависят законы, по которым провайдер обязан или не обязан передавать данные о пользователях властям.</span>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- БУКВА Т -->
+    <!-- ============================================================ -->
+    <div class="letter-section" id="T">
+        <h2 class="letter-title">Т</h2>
+
+        <div class="term-card">
+            <strong>Трафик</strong>
+            <span class="definition">— все данные, которые передаются между вашим устройством и интернетом. VPN шифрует ваш трафик, чтобы его не могли прочитать посторонние.</span>
+        </div>
+
+        <div class="term-card">
+            <strong>Туннель (VPN-туннель)</strong>
+            <span class="definition">— зашифрованное соединение между вашим устройством и VPN-сервером. Вся ваша информация передаётся внутри этого туннеля, и никто снаружи не может её прочитать.</span>
+        </div>
+
+        <div class="term-card">
+            <strong>TLS (Transport Layer Security)</strong>
+            <span class="definition">— протокол шифрования, который используется для защиты данных в интернете. Например, когда вы заходите на сайт с https:// — это и есть TLS. Многие современные VPN-протоколы используют TLS для маскировки.</span>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- БУКВА У -->
+    <!-- ============================================================ -->
+    <div class="letter-section" id="U">
+        <h2 class="letter-title">У</h2>
+
+        <div class="term-card">
+            <strong>Утечка (Leak)</strong>
+            <span class="definition">— см. «Брешь». Ситуация, когда VPN не защищает часть вашего трафика (например, DNS или WebRTC), и ваши данные становятся видны провайдеру или сайтам.</span>
+        </div>
+
+        <div class="term-card">
+            <strong>Уровень шифрования (Encryption Cipher)</strong>
+            <span class="definition">— алгоритм, который используется для шифрования данных. Чем выше уровень (например, AES-256 вместо AES-128), тем сложнее взломать шифрование, но тем больше нагрузка на процессор.</span>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- БУКВА Ф -->
+    <!-- ============================================================ -->
+    <div class="letter-section" id="F">
+        <h2 class="letter-title">Ф</h2>
+
+        <div class="term-card">
+            <strong>Файрвол (Брандмауэр)</strong>
+            <span class="definition">— система защиты, которая фильтрует входящий и исходящий трафик. В некоторых странах государственные файрволы активно блокируют VPN-протоколы.</span>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- БУКВА Х -->
+    <!-- ============================================================ -->
+    <div class="letter-section" id="H">
+        <h2 class="letter-title">Х</h2>
+
+        <div class="term-card">
+            <strong>Хендшейк (Handshake)</strong>
+            <span class="definition">— «рукопожатие». Процесс установки соединения между клиентом и сервером, во время которого они договариваются о параметрах шифрования и обмениваются ключами.</span>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- БУКВА Ц -->
+    <!-- ============================================================ -->
+    <div class="letter-section" id="C">
+        <h2 class="letter-title">Ц</h2>
+
+        <div class="term-card">
+            <strong>Цепочка прокси (Proxy Chain)</strong>
+            <span class="definition">— последовательное подключение через несколько прокси-серверов или VPN для повышения анонимности. Используется редко, так как сильно снижает скорость.</span>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- БУКВА Ч -->
+    <!-- ============================================================ -->
+    <div class="letter-section" id="Ch">
+        <h2 class="letter-title">Ч</h2>
+
+        <div class="term-card">
+            <strong>Чёрный список (Blacklist)</strong>
+            <span class="definition">— список IP-адресов или доменов, которые заблокированы провайдером или государством. VPN помогает обойти чёрные списки, подставляя IP-адрес сервера, которого в списке нет.</span>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- БУКВА Ш -->
+    <!-- ============================================================ -->
+    <div class="letter-section" id="Sh">
+        <h2 class="letter-title">Ш</h2>
+
+        <div class="term-card">
+            <strong>Шифрование (Encryption)</strong>
+            <span class="definition">— процесс превращения читаемых данных в нечитаемый «шум» с помощью ключа. Даже если кто-то перехватит ваш трафик, он не сможет его прочитать без ключа расшифровки.</span>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- БУКВА Э -->
+    <!-- ============================================================ -->
+    <div class="letter-section" id="E_">
+        <h2 class="letter-title">Э</h2>
+
+        <div class="term-card">
+            <strong>Эксплойт</strong>
+            <span class="definition">— программа или метод, использующий уязвимости в системе. Хороший VPN защищает вас не только от прослушивания, но и от некоторых типов атак.</span>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- БУКВА Ю -->
+    <!-- ============================================================ -->
+    <div class="letter-section" id="Yu">
+        <h2 class="letter-title">Ю</h2>
+
+        <div class="term-card">
+            <strong>Юрисдикция</strong>
+            <span class="definition">— см. «Субъект». Страна, законам которой подчиняется VPN-провайдер. Важно выбирать провайдера в юрисдикции с сильными законами о защите приватности (например, Панама, Швейцария, Британские Виргинские острова).</span>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- БУКВА Я -->
+    <!-- ============================================================ -->
+    <div class="letter-section" id="Ya">
+        <h2 class="letter-title">Я</h2>
+
+        <div class="term-card">
+            <strong>Явный прокси (Transparent Proxy)</strong>
+            <span class="definition">— прокси-сервер, который перенаправляет ваш трафик без вашего ведома. Часто используется провайдерами или в корпоративных сетях. VPN помогает обойти такой прокси.</span>
+        </div>
+    </div>
+
+    <!-- ПОДВАЛ -->
+    <footer class="footer">
+        <span>© 2026 · VPN для самых маленьких</span>
+        <span><a href="#top" style="color: #0b1a2e; text-decoration: none; border-bottom: 1px dotted #94a3b8;">⬆ Наверх</a></span>
+    </footer>
+
+</div>
+
+</body>
+</html>
