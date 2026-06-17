@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPN для самых маленьких</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        /* ----- Глобальный сброс и база ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8fafc;
+            color: #0b1a2e;
+            line-height: 1.6;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        /* ----- Шапка / Навигация ----- */
+        .header {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 1.5rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .site-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: #0b1a2e;
+        }
+
+        .site-title span {
+            background: #0b1a2e;
+            color: #ffffff;
+            padding: 0.1rem 0.6rem;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-right: 4px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a {
+            color: #1e3a5f;
+            text-decoration: none;
+            padding: 0.3rem 0;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            border-bottom-color: #0b1a2e;
+        }
+
+        .nav-links a.active {
+            border-bottom-color: #0b1a2e;
+            color: #0b1a2e;
+        }
+
+        /* ----- Типографика ----- */
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+            margin-bottom: 1rem;
+        }
+
+        h1 .highlight {
+            background: #dbeafe;
+            color: #1e3a5f;
+            padding: 0.1rem 0.8rem;
+            border-radius: 8px;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: #334e68;
+            margin-bottom: 2.5rem;
+            font-weight: 400;
+            max-width: 80%;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-top: 2.5rem;
+            margin-bottom: 1.2rem;
+            border-left: 5px solid #0b1a2e;
+            padding-left: 1rem;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+
+        /* ----- Карточки-ссылки на страницы (оглавление) ----- */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin: 2.5rem 0 2rem;
+        }
+
+        .card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 1.8rem 1.5rem;
+            transition: transform 0.15s ease, box-shadow 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.08);
+            border-color: #b9c8db;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            font-size: 1.3rem;
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            color: #475569;
+            margin-bottom: 0;
+        }
+
+        .card .emoji-big {
+            font-size: 2.2rem;
+            display: block;
+            margin-bottom: 0.6rem;
+        }
+
+        /* ----- Блок "Для кого эта книга" ----- */
+        .info-block {
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid #e9edf2;
+            padding: 2rem 2.2rem;
+            margin: 2rem 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        .info-block ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-block li {
+            padding: 0.4rem 0;
+            padding-left: 1.8rem;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%230b1a2e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>') left center no-repeat;
+            background-size: 1.1rem;
+        }
+
+        /* ----- Подвал ----- */
+        .footer {
+            margin-top: 4rem;
+            padding-top: 1.8rem;
+            border-top: 1px solid #e2e8f0;
+            color: #64748b;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .footer a {
+            color: #1e3a5f;
+            text-decoration: none;
+            border-bottom: 1px dotted #cbd5e1;
+        }
+
+        /* ----- Адаптивность ----- */
+        @media (max-width: 700px) {
+            body {
+                padding: 1rem;
+            }
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .nav-links {
+                gap: 1.2rem;
+                flex-wrap: wrap;
+            }
+            h1 {
+                font-size: 2.1rem;
+            }
+            .subtitle {
+                max-width: 100%;
+                font-size: 1.1rem;
+            }
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+            .info-block {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ШАПКА -->
+    <header class="header">
+        <div class="site-title">
+            <span>VPN</span> для самых маленьких
+        </div>
+        <nav class="nav-links">
+            <a href="index.html" class="active">Главная</a>
+            <a href="alphabet.html">Азбука</a>
+            <a href="protocols.html">Протоколы</a>
+            <a href="setup.html">Настройка</a>
+        </nav>
+    </header>
+
+    <!-- ГЛАВНЫЙ БЛОК -->
+    <h1>
+        Ваш проводник <br>в мире <span class="highlight">частных сетей</span>
+    </h1>
+    <p class="subtitle">
+        Книга для обычных пользователей: без сложного кода, страшных терминов и воды. 
+        Только то, что реально нужно знать.
+    </p>
+
+    <!-- ОГЛАВЛЕНИЕ (карточки-ссылки) -->
+    <div class="card-grid">
+        <a href="alphabet.html" class="card">
+            <span class="emoji-big">📖</span>
+            <h3>Азбука VPN</h3>
+            <p>От «А» до «Я»: что такое kill switch, туннель, шифрование и другие термины.</p>
+        </a>
+        <a href="protocols.html" class="card">
+            <span class="emoji-big">🔀</span>
+            <h3>Протоколы</h3>
+            <p>WireGuard, OpenVPN, IKEv2 — зачем их так много и какой выбрать.</p>
+        </a>
+        <a href="setup.html" class="card">
+            <span class="emoji-big">⚙️</span>
+            <h3>Настройка</h3>
+            <p>Пошаговые инструкции для Windows, macOS, Android и iOS.</p>
+        </a>
+    </div>
+
+    <!-- БЛОК "ДЛЯ КОГО ЭТО" -->
+    <div class="info-block">
+        <h2 style="margin-top: 0; border-left-color: #94a3b8;">Для кого эта книга</h2>
+        <ul>
+            <li>Вы слышали про VPN, но не понимаете, как он работает и зачем нужен.</li>
+            <li>Хотите разобраться в протоколах, но гугл выдаёт слишком сложные статьи.</li>
+            <li>Нужно настроить VPN на своём устройстве, но страшно нажать не ту кнопку.</li>
+            <li>Вы хотите знать, как использовать VPN безопасно и не попасть в ловушки.</li>
+        </ul>
+        <p style="margin-top: 1rem; color: #475569;">
+            Эта книга — ваш первый шаг к осознанному использованию интернета. 
+            Никакой рекламы, никаких скрытых сборов. Просто факты и инструкции.
+        </p>
+    </div>
+
+    <!-- ПОДВАЛ -->
+    <footer class="footer">
+        <span>© 2026 · VPN для самых маленьких</span>
+        <span>Сделано для тех, кто хочет разобраться</span>
+    </footer>
+
+</div>
+
+</body>
+</html>
