@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPN Клиенты — VPN для самых маленьких</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8fafc;
+            color: #0b1a2e;
+            line-height: 1.7;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        /* ----- Шапка (единый стиль) ----- */
+        .header {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 1.5rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .site-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: #0b1a2e;
+        }
+
+        .site-title span {
+            background: #0b1a2e;
+            color: #ffffff;
+            padding: 0.1rem 0.6rem;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-right: 4px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #1e3a5f;
+            text-decoration: none;
+            padding: 0.3rem 0;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            border-bottom-color: #0b1a2e;
+        }
+
+        .nav-links a.active {
+            border-bottom-color: #0b1a2e;
+            color: #0b1a2e;
+        }
+
+        /* ----- Заголовки ----- */
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-desc {
+            font-size: 1.2rem;
+            color: #334e68;
+            margin-bottom: 2.5rem;
+            border-left: 4px solid #94a3b8;
+            padding-left: 1.5rem;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 5px solid #0b1a2e;
+            padding-left: 1rem;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 0.3rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+
+        /* ----- Карточка клиента ----- */
+        .client-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 1.5rem 1.8rem;
+            margin-bottom: 1.2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem 2rem;
+            align-items: flex-start;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        .client-card:hover {
+            border-color: #b9c8db;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .client-icon {
+            font-size: 2.8rem;
+            line-height: 1;
+            flex-shrink: 0;
+            width: 3.5rem;
+            text-align: center;
+        }
+
+        .client-info {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .client-info .badge-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem 0.8rem;
+            margin: 0.3rem 0 0.6rem;
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            padding: 0.15rem 0.7rem;
+            border-radius: 20px;
+            background: #e9edf2;
+            color: #1e3a5f;
+        }
+
+        .badge.green {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge.blue {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge.orange {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge.purple {
+            background: #ede9fe;
+            color: #5b21b6;
+        }
+
+        .badge.red {
+            background: #fecaca;
+            color: #991b1b;
+        }
+
+        .client-info p {
+            margin-bottom: 0.4rem;
+            font-size: 0.95rem;
+        }
+
+        .client-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem 1.2rem;
+            margin-top: 0.5rem;
+        }
+
+        .client-links a {
+            color: #1e3a5f;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-bottom: 1px dotted #cbd5e1;
+            transition: border-color 0.2s ease;
+        }
+
+        .client-links a:hover {
+            border-bottom-color: #0b1a2e;
+        }
+
+        /* ----- Блок советов ----- */
+        .tip-box {
+            background: #f1f4f9;
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            border-left: 5px solid #0b1a2e;
+        }
+
+        .tip-box h3 {
+            margin-top: 0;
+        }
+
+        .tip-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tip-box li {
+            padding: 0.3rem 0;
+            padding-left: 1.6rem;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%230b1a2e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>') left center no-repeat;
+            background-size: 1rem;
+            color: #1e293b;
+        }
+
+        /* ----- Подвал ----- */
+        .footer {
+            margin-top: 4rem;
+            padding-top: 1.8rem;
+            border-top: 1px solid #e2e8f0;
+            color: #64748b;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .footer a {
+            color: #1e3a5f;
+            text-decoration: none;
+            border-bottom: 1px dotted #cbd5e1;
+        }
+
+        /* ----- Адаптивность ----- */
+        @media (max-width: 700px) {
+            body {
+                padding: 1rem;
+            }
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .nav-links {
+                gap: 1rem;
+            }
+            h1 {
+                font-size: 2.1rem;
+            }
+            .page-desc {
+                font-size: 1rem;
+                padding-left: 1rem;
+            }
+            .client-card {
+                padding: 1.2rem;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .client-icon {
+                font-size: 2.4rem;
+                width: auto;
+                text-align: left;
+            }
+            .tip-box {
+                padding: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ШАПКА -->
+    <header class="header">
+        <div class="site-title">
+            <span>VPN</span> для самых маленьких
+        </div>
+        <nav class="nav-links">
+            <a href="index.html">Главная</a>
+            <a href="alphabet.html">Азбука</a>
+            <a href="protocols.html">Протоколы</a>
+            <a href="vpn_clients.html" class="active">Клиенты</a>
+            <a href="setup.html">Настройка</a>
+        </nav>
+    </header>
+
+    <!-- ЗАГОЛОВОК -->
+    <h1>VPN Клиенты</h1>
+    <div class="page-desc">
+        Программы и приложения, с помощью которых вы подключаетесь к VPN. 
+        Выберите тот, который подходит для вашего устройства.
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- МОБИЛЬНЫЕ КЛИЕНТЫ -->
+    <!-- ============================================================ -->
+    <h2>📱 Мобильные (Android &amp; iOS)</h2>
+
+    <!-- 1. v2rayNG -->
+    <div class="client-card">
+        <div class="client-icon">📡</div>
+        <div class="client-info">
+            <h3>v2rayNG</h3>
+            <div class="badge-group">
+                <span class="badge green">Android</span>
+                <span class="badge blue">Бесплатный</span>
+                <span class="badge orange">С открытым кодом</span>
+            </div>
+            <p>
+                Самый популярный клиент для Android. Поддерживает <strong>VMess, VLESS, Shadowsocks, Trojan</strong> и другие протоколы. 
+                Умеет работать с подписками и настраивать маршрутизацию.
+            </p>
+            <div class="client-links">
+                <a href="https://github.com/2dust/v2rayNG/releases" target="_blank">⬇ Скачать (GitHub)</a>
+                <a href="https://play.google.com/store/apps/details?id=com.v2ray.ang" target="_blank">Google Play</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Nekobox -->
+    <div class="client-card">
+        <div class="client-icon">📦</div>
+        <div class="client-info">
+            <h3>Nekobox</h3>
+            <div class="badge-group">
+                <span class="badge green">Android</span>
+                <span class="badge purple">iOS (TestFlight)</span>
+                <span class="badge blue">Бесплатный</span>
+            </div>
+            <p>
+                Современный клиент на базе <strong>Sing-box</strong>. Поддерживает все современные протоколы, включая <strong>VLESS+Reality</strong>, 
+                Hysteria, TUIC. Красивый интерфейс и регулярные обновления.
+            </p>
+            <div class="client-links">
+                <a href="https://github.com/MatsuriDayo/NekoBoxForAndroid/releases" target="_blank">⬇ Скачать (Android)</a>
+                <a href="https://testflight.apple.com/join/..." target="_blank">TestFlight (iOS)</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Hiddify -->
+    <div class="client-card">
+        <div class="client-icon">🛡️</div>
+        <div class="client-info">
+            <h3>Hiddify</h3>
+            <div class="badge-group">
+                <span class="badge green">Android</span>
+                <span class="badge blue">iOS</span>
+                <span class="badge blue">Бесплатный</span>
+            </div>
+            <p>
+                Универсальный клиент с простым интерфейсом. Поддерживает <strong>VLESS, VMess, Trojan, Shadowsocks, WireGuard</strong>. 
+                Есть встроенный VPN-сервис и поддержка подписок. Отлично подходит для новичков.
+            </p>
+            <div class="client-links">
+                <a href="https://github.com/hiddify/hiddify-next/releases" target="_blank">⬇ Скачать (GitHub)</a>
+                <a href="https://apps.apple.com/app/hiddify/id6446858370" target="_blank">App Store</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Shadowrocket (iOS) -->
+    <div class="client-card">
+        <div class="client-icon">🚀</div>
+        <div class="client-info">
+            <h3>Shadowrocket</h3>
+            <div class="badge-group">
+                <span class="badge blue">iOS</span>
+                <span class="badge orange">Платный ($2.99)</span>
+            </div>
+            <p>
+                Один из лучших клиентов для iOS. Поддерживает <strong>Shadowsocks, VMess, VLESS, Trojan, WireGuard</strong>. 
+                Позволяет гибко настраивать маршрутизацию и работать с подписками.
+            </p>
+            <div class="client-links">
+                <a href="https://apps.apple.com/app/shadowrocket/id932747118" target="_blank">⬇ App Store</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. Outline (iOS / Android) -->
+    <div class="client-card">
+        <div class="client-icon">🌐</div>
+        <div class="client-info">
+            <h3>Outline</h3>
+            <div class="badge-group">
+                <span class="badge green">Android</span>
+                <span class="badge blue">iOS</span>
+                <span class="badge blue">Бесплатный</span>
+            </div>
+            <p>
+                Клиент от Jigsaw (дочерняя компания Alphabet). Работает только с <strong>Shadowsocks</strong>. 
+                Очень простой интерфейс, идеален для новичков.
+            </p>
+            <div class="client-links">
+                <a href="https://play.google.com/store/apps/details?id=org.outline.android.client" target="_blank">Google Play</a>
+                <a href="https://apps.apple.com/app/outline-app/id1356177741" target="_blank">App Store</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ДЕСКТОПНЫЕ КЛИЕНТЫ -->
+    <!-- ============================================================ -->
+    <h2>💻 Десктопные (Windows, macOS, Linux)</h2>
+
+    <!-- 6. Nekoray / Nekobox (Desktop) -->
+    <div class="client-card">
+        <div class="client-icon">🖥️</div>
+        <div class="client-info">
+            <h3>Nekoray / Nekobox Desktop</h3>
+            <div class="badge-group">
+                <span class="badge green">Windows</span>
+                <span class="badge blue">macOS</span>
+                <span class="badge purple">Linux</span>
+                <span class="badge blue">Бесплатный</span>
+            </div>
+            <p>
+                Десктопная версия Nekobox на базе <strong>Sing-box</strong>. Поддерживает все современные протоколы: 
+                <strong>VLESS+Reality, Trojan, Shadowsocks, Hysteria, TUIC</strong>. Есть графический интерфейс и режим TUN.
+            </p>
+            <div class="client-links">
+                <a href="https://github.com/MatsuriDayo/nekoray/releases" target="_blank">⬇ Скачать (GitHub)</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. Hiddify Desktop -->
+    <div class="client-card">
+        <div class="client-icon">🛡️</div>
+        <div class="client-info">
+            <h3>Hiddify Desktop</h3>
+            <div class="badge-group">
+                <span class="badge green">Windows</span>
+                <span class="badge blue">macOS</span>
+                <span class="badge purple">Linux</span>
+                <span class="badge blue">Бесплатный</span>
+            </div>
+            <p>
+                Кроссплатформенный клиент с поддержкой <strong>VLESS, VMess, Trojan, Shadowsocks, WireGuard</strong>. 
+                Простой интерфейс, работа с подписками и встроенный TUN-режим.
+            </p>
+            <div class="client-links">
+                <a href="https://github.com/hiddify/hiddify-next/releases" target="_blank">⬇ Скачать (GitHub)</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 8. V2RayN -->
+    <div class="client-card">
+        <div class="client-icon">⚡</div>
+        <div class="client-info">
+            <h3>V2RayN</h3>
+            <div class="badge-group">
+                <span class="badge green">Windows</span>
+                <span class="badge blue">Бесплатный</span>
+                <span class="badge orange">С открытым кодом</span>
+            </div>
+            <p>
+                Классический клиент для Windows на базе <strong>Xray / V2Ray</strong>. Поддерживает <strong>VMess, VLESS, Shadowsocks, Trojan, SOCKS5</strong>. 
+                Мощный инструмент с множеством настроек, но при этом понятный даже новичкам.
+            </p>
+            <div class="client-links">
+                <a href="https://github.com/2dust/v2rayN/releases" target="_blank">⬇ Скачать (GitHub)</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 9. OpenVPN GUI / Tunnelblick -->
+    <div class="client-card">
+        <div class="client-icon">🔒</div>
+        <div class="client-info">
+            <h3>OpenVPN GUI / Tunnelblick</h3>
+            <div class="badge-group">
+                <span class="badge green">Windows</span>
+                <span class="badge blue">macOS</span>
+                <span class="badge purple">Linux</span>
+                <span class="badge blue">Бесплатный</span>
+            </div>
+            <p>
+                Официальные клиенты для протокола <strong>OpenVPN</strong>. Используют <strong>.ovpn</strong>-файлы для подключения. 
+                Tunnelblick — для macOS, OpenVPN GUI — для Windows.
+            </p>
+            <div class="client-links">
+                <a href="https://openvpn.net/client/" target="_blank">⬇ OpenVPN Connect</a>
+                <a href="https://tunnelblick.net/" target="_blank">Tunnelblick (macOS)</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- СОВЕТЫ ПО ВЫБОРУ -->
+    <!-- ============================================================ -->
+    <div class="tip-box">
+        <h3>💡 Какой клиент выбрать?</h3>
+        <ul>
+            <li>
+                <strong>Для Android:</strong> 
+                <a href="#v2rayNG" style="color: #0b1a2e; text-decoration: underline dotted;">v2rayNG</a> (надёжный) или 
+                <a href="#Nekobox" style="color: #0b1a2e; text-decoration: underline dotted;">Nekobox</a> (современный).
+            </li>
+            <li>
+                <strong>Для iOS:</strong> 
+                <a href="#Shadowrocket" style="color: #0b1a2e; text-decoration: underline dotted;">Shadowrocket</a> (лучший функционал) или 
+                <a href="#Hiddify" style="color: #0b1a2e; text-decoration: underline dotted;">Hiddify</a> (бесплатный).
+            </li>
+            <li>
+                <strong>Для Windows:</strong> 
+                <a href="#V2RayN" style="color: #0b1a2e; text-decoration: underline dotted;">V2RayN</a> (проверенный) или 
+                <a href="#Nekobox" style="color: #0b1a2e; text-decoration: underline dotted;">Nekobox</a> / 
+                <a href="#Hiddify" style="color: #0b1a2e; text-decoration: underline dotted;">Hiddify</a> (для VLESS+Reality).
+            </li>
+            <li>
+                <strong>Для macOS:</strong> 
+                <a href="#Hiddify" style="color: #0b1a2e; text-decoration: underline dotted;">Hiddify</a> или 
+                <a href="#Nekobox" style="color: #0b1a2e; text-decoration: underline dotted;">Nekobox</a>.
+            </li>
+            <li>
+                <strong>Для Linux:</strong> 
+                <a href="#Nekobox" style="color: #0b1a2e; text-decoration: underline dotted;">Nekobox</a> или 
+                <a href="#Hiddify" style="color: #0b1a2e; text-decoration: underline dotted;">Hiddify</a>.
+            </li>
+        </ul>
+        <p style="margin-top: 0.8rem; font-size: 0.95rem; color: #475569;">
+            ⚠️ Всегда скачивайте клиенты только с <strong>официальных репозиториев</strong> (GitHub, Google Play, App Store), 
+            чтобы избежать вредоносных версий.
+        </p>
+    </div>
+
+    <!-- ПОДВАЛ -->
+    <footer class="footer">
+        <span>© 2026 · VPN для самых маленьких</span>
+        <span>Сделано для тех, кто хочет разобраться</span>
+    </footer>
+
+</div>
+
+</body>
+</html>
