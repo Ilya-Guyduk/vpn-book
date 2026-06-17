@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>С самого начала — VPN для самых маленьких</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8fafc;
+            color: #0b1a2e;
+            line-height: 1.7;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        /* ----- Шапка ----- */
+        .header {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 1.5rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .site-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: #0b1a2e;
+        }
+
+        .site-title span {
+            background: #0b1a2e;
+            color: #ffffff;
+            padding: 0.1rem 0.6rem;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-right: 4px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #1e3a5f;
+            text-decoration: none;
+            padding: 0.3rem 0;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            border-bottom-color: #0b1a2e;
+        }
+
+        .nav-links a.active {
+            border-bottom-color: #0b1a2e;
+            color: #0b1a2e;
+        }
+
+        /* ----- Заголовки ----- */
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-desc {
+            font-size: 1.2rem;
+            color: #334e68;
+            margin-bottom: 2.5rem;
+            border-left: 4px solid #94a3b8;
+            padding-left: 1.5rem;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-top: 3rem;
+            margin-bottom: 1.2rem;
+            border-left: 5px solid #0b1a2e;
+            padding-left: 1rem;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+
+        /* ----- Нумерованные шаги ----- */
+        .step {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 1.8rem 2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            transition: border-color 0.2s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        .step:hover {
+            border-color: #b9c8db;
+        }
+
+        .step-number {
+            display: inline-block;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #ffffff;
+            background: #0b1a2e;
+            padding: 0.1rem 0.9rem;
+            border-radius: 20px;
+            margin-bottom: 0.8rem;
+            letter-spacing: 0.02em;
+        }
+
+        .step h3 {
+            margin-top: 0;
+            font-size: 1.3rem;
+        }
+
+        .step ul, .step ol {
+            margin: 0.5rem 0 0.2rem 1.5rem;
+            color: #1e293b;
+        }
+
+        .step li {
+            margin-bottom: 0.3rem;
+        }
+
+        /* ----- Выделенные блоки (важно, совет, предупреждение) ----- */
+        .notice {
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+
+        .notice.important {
+            background: #fef3c7;
+            border-left: 5px solid #f59e0b;
+            color: #78350f;
+        }
+
+        .notice.tip {
+            background: #dbeafe;
+            border-left: 5px solid #3b82f6;
+            color: #1e3a5f;
+        }
+
+        .notice.warning {
+            background: #fecaca;
+            border-left: 5px solid #dc2626;
+            color: #7f1d1d;
+        }
+
+        .notice.success {
+            background: #d1fae5;
+            border-left: 5px solid #10b981;
+            color: #065f46;
+        }
+
+        /* ----- Таблица для сравнения клиентов ----- */
+        .client-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.8rem;
+            margin: 1rem 0 0.5rem;
+        }
+
+        .client-grid .client-item {
+            background: #f1f4f9;
+            border-radius: 10px;
+            padding: 0.6rem 1rem;
+            text-align: center;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .client-grid .client-item .platform {
+            display: block;
+            font-weight: 400;
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 0.15rem;
+        }
+
+        /* ----- Подвал ----- */
+        .footer {
+            margin-top: 4rem;
+            padding-top: 1.8rem;
+            border-top: 1px solid #e2e8f0;
+            color: #64748b;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .footer a {
+            color: #1e3a5f;
+            text-decoration: none;
+            border-bottom: 1px dotted #cbd5e1;
+        }
+
+        /* ----- Адаптивность ----- */
+        @media (max-width: 700px) {
+            body {
+                padding: 1rem;
+            }
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .nav-links {
+                gap: 1rem;
+            }
+            h1 {
+                font-size: 2.1rem;
+            }
+            .page-desc {
+                font-size: 1rem;
+                padding-left: 1rem;
+            }
+            .step {
+                padding: 1.2rem 1.2rem;
+            }
+            .client-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ШАПКА -->
+    <header class="header">
+        <div class="site-title">
+            <span>VPN</span> для самых маленьких
+        </div>
+        <nav class="nav-links">
+            <a href="index.html">Главная</a>
+            <a href="alphabet.html">Азбука</a>
+            <a href="protocols.html">Протоколы</a>
+            <a href="vpn_clients.html">Клиенты</a>
+            <a href="setup.html" class="active">С самого начала</a>
+        </nav>
+    </header>
+
+    <!-- ЗАГОЛОВОК -->
+    <h1>С самого начала</h1>
+    <div class="page-desc">
+        Пошаговая инструкция: как установить VPN, получить конфигурацию 
+        и подключиться. Для тех, кто делает это в первый раз.
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ШАГ 1: СКАЧАТЬ КЛИЕНТ -->
+    <!-- ============================================================ -->
+    <div class="step">
+        <span class="step-number">Шаг 1</span>
+        <h3>Скачать VPN-клиент</h3>
+        <p>
+            Первым делом нужно установить программу, через которую вы будете подключаться. 
+            Выберите свой клиент в зависимости от устройства:
+        </p>
+
+        <div class="client-grid">
+            <div class="client-item">
+                Android
+                <span class="platform">v2rayNG / Nekobox / Hiddify</span>
+            </div>
+            <div class="client-item">
+                iOS / iPadOS
+                <span class="platform">Hiddify / Shadowrocket</span>
+            </div>
+            <div class="client-item">
+                Windows
+                <span class="platform">V2RayN / Nekobox / Hiddify</span>
+            </div>
+            <div class="client-item">
+                macOS
+                <span class="platform">Nekobox / Hiddify</span>
+            </div>
+            <div class="client-item">
+                Linux
+                <span class="platform">Nekobox / Hiddify</span>
+            </div>
+        </div>
+
+        <div class="notice tip">
+            💡 <strong>Совет:</strong> Скачивайте клиенты только с официальных источников — 
+            <a href="vpn_clients.html" style="color: #1e40af; text-decoration: underline dotted;">GitHub, Google Play или App Store</a>. 
+            Это защитит вас от вирусов и подделок.
+        </div>
+
+        <p style="margin-top: 0.8rem;">
+            Если вы ещё не знаете, какой клиент выбрать, посмотрите 
+            <a href="vpn_clients.html" style="color: #0b1a2e; font-weight: 600; text-decoration: underline dotted;">полный обзор клиентов</a> 
+            на нашем сайте.
+        </p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ШАГ 2: ГДЕ ВЗЯТЬ КОНФИГ -->
+    <!-- ============================================================ -->
+    <div class="step">
+        <span class="step-number">Шаг 2</span>
+        <h3>Где взять конфигурацию</h3>
+        <p>
+            <strong>Конфигурация (или «конфиг»)</strong> — это набор настроек: адрес сервера, протокол, ключи и порты. 
+            Без него клиент не знает, куда подключаться.
+        </p>
+
+        <p>
+            Обычно конфиг можно получить одним из этих способов:
+        </p>
+
+        <ul>
+            <li>
+                <strong>Подписка (Subscription URL)</strong> — ссылка, которую вы вставляете в клиент. 
+                Клиент сам скачивает все сервера и обновляет их автоматически.
+            </li>
+            <li>
+                <strong>Файл конфигурации</strong> — это может быть файл с расширением <code>.json</code>, <code>.ovpn</code>, <code>.conf</code> 
+                или <code>.txt</code>. Его нужно импортировать в клиент.
+            </li>
+            <li>
+                <strong>QR-код</strong> — часто используется для мобильных клиентов. Вы сканируете код камерой, и настройки автоматически загружаются.
+            </li>
+            <li>
+                <strong>Ручной ввод</strong> — самый сложный способ: вы вводите адрес, порт, ключи и протокол вручную.
+            </li>
+        </ul>
+
+        <div class="notice important">
+            ⚠️ <strong>Важно:</strong> Конфиг — это ваш ключ к VPN. Никогда не передавайте его посторонним и не публикуйте в открытых источниках.
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ШАГ 3: КАК ИМПОРТИРОВАТЬ -->
+    <!-- ============================================================ -->
+    <div class="step">
+        <span class="step-number">Шаг 3</span>
+        <h3>Как импортировать конфигурацию в клиент</h3>
+        <p>
+            Способ импорта зависит от вашего клиента. Вот самые частые варианты:
+        </p>
+
+        <h4 style="margin-top: 1.2rem; font-weight: 600;">📱 Для мобильных клиентов (Android / iOS)</h4>
+        <ul>
+            <li>
+                <strong>QR-код:</strong> в клиенте нажмите кнопку «сканировать» или «+» → «Сканировать QR-код» и наведите камеру.
+            </li>
+            <li>
+                <strong>Подписка:</strong> нажмите «+» → «Импорт из подписки» или «Subscription» → вставьте ссылку → «ОК».
+            </li>
+            <li>
+                <strong>Файл:</strong> скачайте файл на телефон, затем в клиенте нажмите «Импорт из файла» и выберите его.
+            </li>
+        </ul>
+
+        <h4 style="margin-top: 1.2rem; font-weight: 600;">💻 Для десктопных клиентов (Windows / macOS / Linux)</h4>
+        <ul>
+            <li>
+                <strong>Подписка:</strong> в настройках найдите раздел «Subscription» или «Группы» → «Добавить» → вставьте ссылку → «Сохранить».
+            </li>
+            <li>
+                <strong>Файл:</strong> перетащите файл в окно клиента или нажмите «Импорт» / «Import» и выберите его.
+            </li>
+            <li>
+                <strong>Буфер обмена:</strong> скопируйте текст конфига (например, из Telegram), в клиенте нажмите «Импорт из буфера обмена».
+            </li>
+        </ul>
+
+        <div class="notice tip">
+            💡 <strong>Совет:</strong> Если у вас подписка, импортировать её нужно <strong>один раз</strong>. 
+            Клиент будет автоматически обновлять список серверов при каждом запуске.
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ШАГ 4: ПОДКЛЮЧИТЬСЯ И ПРОВЕРИТЬ -->
+    <!-- ============================================================ -->
+    <div class="step">
+        <span class="step-number">Шаг 4</span>
+        <h3>Подключиться и проверить</h3>
+        <p>
+            После импорта конфига осталось сделать последние шаги:
+        </p>
+
+        <ol>
+            <li>
+                <strong>Выберите сервер</strong> (если их несколько) — обычно клиент показывает список с названиями стран и нагрузкой.
+            </li>
+            <li>
+                <strong>Нажмите «Подключиться»</strong> (кнопка с треугольником или ползунком).
+            </li>
+            <li>
+                <strong>Подождите 2–5 секунд</strong> — клиент установит соединение.
+            </li>
+            <li>
+                <strong>Проверьте, что всё работает:</strong>
+                <ul style="margin-top: 0.3rem;">
+                    <li>Зайдите на сайт <a href="https://2ip.ru" target="_blank" style="color: #0b1a2e; text-decoration: underline dotted;">2ip.ru</a> — ваш IP-адрес должен измениться на адрес из другой страны.</li>
+                    <li>Откройте YouTube или Google — они должны загружаться без проблем (если они были заблокированы).</li>
+                    <li>В клиенте должна гореть зелёная иконка или надпись «Подключено».</li>
+                </ul>
+            </li>
+        </ol>
+
+        <div class="notice success">
+            ✅ <strong>Готово!</strong> Вы подключены к VPN. Теперь ваш интернет-трафик зашифрован, а ваш реальный IP-адрес скрыт.
+        </div>
+
+        <div class="notice warning">
+            ⚠️ <strong>Если не подключается:</strong>
+            <ul style="margin-top: 0.3rem; margin-left: 1.2rem;">
+                <li>Проверьте интернет-соединение (без VPN сайты должны открываться).</li>
+                <li>Убедитесь, что вы правильно скопировали подписку или файл.</li>
+                <li>Попробуйте выбрать другой сервер в списке.</li>
+                <li>Перезапустите клиент и попробуйте снова.</li>
+                <li>Проверьте, не блокирует ли ваш антивирус или фаервол VPN-клиент.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- БОНУС: ЧАСТЫЕ ОШИБКИ -->
+    <!-- ============================================================ -->
+    <h2 style="margin-top: 2.5rem;">❓ Частые проблемы и их решение</h2>
+
+    <div class="step" style="border-left: 5px solid #f59e0b;">
+        <h3 style="margin-top: 0;">Подписка не импортируется</h3>
+        <ul>
+            <li>Проверьте, что ссылка начинается с <code>https://</code> или <code>vless://</code> / <code>vmess://</code>.</li>
+            <li>Убедитесь, что вы скопировали <strong>всю</strong> ссылку (без пробелов и лишних символов).</li>
+            <li>Попробуйте импортировать вручную через файл (сохраните ссылку как .txt и импортируйте).</li>
+        </ul>
+    </div>
+
+    <div class="step" style="border-left: 5px solid #3b82f6;">
+        <h3 style="margin-top: 0;">VPN подключается, но ничего не открывается</h3>
+        <ul>
+            <li>Возможно, проблема с DNS. Попробуйте в настройках клиента включить «DNS-over-HTTPS» или укажите DNS <code>1.1.1.1</code> (Cloudflare) или <code>8.8.8.8</code> (Google).</li>
+            <li>Попробуйте переключить протокол (если у вас несколько вариантов в подписке).</li>
+            <li>Проверьте, не включён ли режим «только для определённых приложений» (Split Tunneling) — если да, отключите его для теста.</li>
+        </ul>
+    </div>
+
+    <div class="step" style="border-left: 5px solid #dc2626;">
+        <h3 style="margin-top: 0;">Клиент пишет «Ошибка сертификата» или «TLS handshake failed»</h3>
+        <ul>
+            <li>Обычно это значит, что ваш провайдер или государственный файрвол блокирует VPN-соединение.</li>
+            <li>Попробуйте подключиться через <strong>другой протокол</strong> (например, вместо VLESS используйте Trojan или Shadowsocks).</li>
+            <li>Попробуйте включить в клиенте <strong>маскировку (Obfuscation)</strong> или режим «Reality».</li>
+        </ul>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ИТОГОВЫЙ БЛОК -->
+    <!-- ============================================================ -->
+    <div style="background: #0b1a2e; color: #ffffff; border-radius: 16px; padding: 2rem 2.5rem; margin-top: 2.5rem;">
+        <h3 style="color: #ffffff; margin-top: 0; font-size: 1.4rem;">🎯 Итог: что вы теперь умеете</h3>
+        <ul style="color: #d1d9e8; list-style: none; padding: 0;">
+            <li style="padding: 0.4rem 0; padding-left: 1.8rem; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%2310b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>') left center no-repeat; background-size: 1.2rem;">
+                ✅ Выбрать и установить подходящий VPN-клиент для вашего устройства
+            </li>
+            <li style="padding: 0.4rem 0; padding-left: 1.8rem; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%2310b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>') left center no-repeat; background-size: 1.2rem;">
+                ✅ Получить конфигурацию (подписку, файл или QR-код)
+            </li>
+            <li style="padding: 0.4rem 0; padding-left: 1.8rem; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%2310b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>') left center no-repeat; background-size: 1.2rem;">
+                ✅ Импортировать конфиг в клиент (даже если делаете это впервые)
+            </li>
+            <li style="padding: 0.4rem 0; padding-left: 1.8rem; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%2310b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>') left center no-repeat; background-size: 1.2rem;">
+                ✅ Подключиться и проверить, что VPN работает
+            </li>
+        </ul>
+        <p style="color: #94a3b8; margin-top: 1.2rem; font-size: 0.95rem;">
+            Теперь вы готовы пользоваться VPN самостоятельно. Если что-то пошло не так — перечитайте раздел «Частые проблемы» выше.
+        </p>
+    </div>
+
+    <!-- ПОДВАЛ -->
+    <footer class="footer">
+        <span>© 2026 · VPN для самых маленьких</span>
+        <span><a href="#top" style="color: #0b1a2e; text-decoration: none; border-bottom: 1px dotted #94a3b8;">⬆ Наверх</a></span>
+    </footer>
+
+</div>
+
+</body>
+</html>
