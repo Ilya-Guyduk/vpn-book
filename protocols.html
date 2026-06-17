@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Протоколы — VPN для самых маленьких</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8fafc;
+            color: #0b1a2e;
+            line-height: 1.7;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        /* ----- Шапка (такая же, как на главной) ----- */
+        .header {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 1.5rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .site-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: #0b1a2e;
+        }
+
+        .site-title span {
+            background: #0b1a2e;
+            color: #ffffff;
+            padding: 0.1rem 0.6rem;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-right: 4px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a {
+            color: #1e3a5f;
+            text-decoration: none;
+            padding: 0.3rem 0;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            border-bottom-color: #0b1a2e;
+        }
+
+        .nav-links a.active {
+            border-bottom-color: #0b1a2e;
+            color: #0b1a2e;
+        }
+
+        /* ----- Заголовки ----- */
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-desc {
+            font-size: 1.2rem;
+            color: #334e68;
+            margin-bottom: 2.5rem;
+            border-left: 4px solid #94a3b8;
+            padding-left: 1.5rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-top: 3rem;
+            margin-bottom: 0.75rem;
+            border-left: 5px solid #0b1a2e;
+            padding-left: 1rem;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-top: 1.8rem;
+            margin-bottom: 0.4rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+
+        /* ----- Карточка протокола ----- */
+        .protocol-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 1.8rem 2rem;
+            margin: 1.8rem 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            transition: border-color 0.2s ease;
+        }
+
+        .protocol-card:hover {
+            border-color: #b9c8db;
+        }
+
+        .protocol-header {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.5rem;
+        }
+
+        .protocol-header h3 {
+            margin: 0;
+            font-size: 1.6rem;
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            background: #e9edf2;
+            color: #1e3a5f;
+        }
+
+        .badge.green {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge.blue {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge.orange {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge.purple {
+            background: #ede9fe;
+            color: #5b21b6;
+        }
+
+        .protocol-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0.8rem 0 0.2rem;
+        }
+
+        .protocol-card li {
+            padding: 0.25rem 0;
+            padding-left: 1.6rem;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%230b1a2e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>') left center no-repeat;
+            background-size: 1rem;
+            color: #1e293b;
+        }
+
+        .comparison-box {
+            background: #f1f4f9;
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            border-left: 5px solid #0b1a2e;
+        }
+
+        .comparison-box h3 {
+            margin-top: 0;
+        }
+
+        .comparison-box table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .comparison-box th {
+            text-align: left;
+            padding: 0.6rem 0.4rem 0.6rem 0;
+            font-weight: 600;
+            border-bottom: 2px solid #cbd5e1;
+        }
+
+        .comparison-box td {
+            padding: 0.6rem 0.4rem 0.6rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .comparison-box tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* ----- Подвал ----- */
+        .footer {
+            margin-top: 4rem;
+            padding-top: 1.8rem;
+            border-top: 1px solid #e2e8f0;
+            color: #64748b;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        /* ----- Адаптивность ----- */
+        @media (max-width: 700px) {
+            body {
+                padding: 1rem;
+            }
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .nav-links {
+                gap: 1.2rem;
+                flex-wrap: wrap;
+            }
+            h1 {
+                font-size: 2.1rem;
+            }
+            .page-desc {
+                font-size: 1rem;
+                padding-left: 1rem;
+            }
+            .protocol-card {
+                padding: 1.2rem;
+            }
+            .protocol-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .comparison-box {
+                padding: 1.2rem;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ШАПКА -->
+    <header class="header">
+        <div class="site-title">
+            <span>VPN</span> для самых маленьких
+        </div>
+        <nav class="nav-links">
+            <a href="index.html">Главная</a>
+            <a href="alphabet.html">Азбука</a>
+            <a href="protocols.html" class="active">Протоколы</a>
+            <a href="setup.html">Настройка</a>
+        </nav>
+    </header>
+
+    <!-- ЗАГОЛОВОК СТРАНИЦЫ -->
+    <h1>Современные протоколы</h1>
+    <div class="page-desc">
+        VLESS, VMess, Shadowsocks, Trojan — разбираем, чем они отличаются, 
+        зачем нужны и какой выбрать.
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 1. VLESS -->
+    <!-- ============================================================ -->
+    <div class="protocol-card">
+        <div class="protocol-header">
+            <h3>VLESS</h3>
+            <span class="badge green">Самый лёгкий</span>
+            <span class="badge blue">Без шифрования</span>
+        </div>
+        <p>
+            <strong>VLESS</strong> — это облегчённая версия протокола VMess без встроенного шифрования. 
+            Да, вы не ослышались: он не шифрует трафик сам по себе. 
+            Вместо этого он полагается на <strong>внешний TLS</strong> (обычно через XTLS или Reality), 
+            который обеспечивает защиту.
+        </p>
+        <ul>
+            <li><strong>Скорость:</strong> максимальная, потому что нет лишних операций шифрования.</li>
+            <li><strong>Когда использовать:</strong> если вы подключаетесь через проверенный сервер с активным TLS (например, через CDN или Reality).</li>
+            <li><strong>Где встречается:</strong> Xray, Sing-box, v2rayNG, Nekobox.</li>
+            <li><strong>Важно:</strong> VLESS <em>нельзя</em> использовать без внешнего шифрования — иначе трафик будет виден как открытый текст.</li>
+        </ul>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 2. VMess -->
+    <!-- ============================================================ -->
+    <div class="protocol-card">
+        <div class="protocol-header">
+            <h3>VMess</h3>
+            <span class="badge orange">Классика</span>
+            <span class="badge">Со встроенным шифрованием</span>
+        </div>
+        <p>
+            <strong>VMess</strong> — это оригинальный протокол из экосистемы V2Ray. 
+            В отличие от VLESS, у него есть <strong>собственное шифрование</strong> (например, AES-128-GCM или ChaCha20-Poly1305). 
+            Это делает его более автономным: вы можете подключиться даже без TLS-сертификата.
+        </p>
+        <ul>
+            <li><strong>Скорость:</strong> чуть ниже, чем у VLESS, из-за шифрования, но в повседневной жизни разница незаметна.</li>
+            <li><strong>Когда использовать:</strong> если ваш сервер не поддерживает TLS, или вы хотите простой и проверенный вариант.</li>
+            <li><strong>Где встречается:</strong> V2Ray, Xray, Sing-box, большинство мобильных клиентов.</li>
+            <li><strong>Нюанс:</strong> VMess использует <strong>динамический порт</strong> и специфический формат заголовков, что помогает обходить DPI.</li>
+        </ul>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 3. Shadowsocks -->
+    <!-- ============================================================ -->
+    <div class="protocol-card">
+        <div class="protocol-header">
+            <h3>Shadowsocks</h3>
+            <span class="badge purple">Ветеран</span>
+            <span class="badge">SOCKS5-прокси</span>
+        </div>
+        <p>
+            <strong>Shadowsocks</strong> — это не совсем VPN, а скорее <strong>зашифрованный SOCKS5-прокси</strong>. 
+            Он появился ещё в 2012 году и до сих пор активно используется, особенно в Китае. 
+            Его главная фишка — <strong>лёгкость</strong> и минимальный оверхед.
+        </p>
+        <ul>
+            <li><strong>Шифрование:</strong> AES-256-GCM, ChaCha20-IETF-Poly1305 и другие.</li>
+            <li><strong>Скорость:</strong> очень высокая, так как протокол простой и не создаёт виртуальных сетевых интерфейсов.</li>
+            <li><strong>Когда использовать:</strong> если нужен быстрый прокси для отдельных приложений (браузер, Telegram), а не для всего устройства.</li>
+            <li><strong>Где встречается:</strong> Shadowsocks-rust, Sing-box, Outline, многие клиенты.</li>
+            <li><strong>Важно:</strong> Shadowsocks не маскирует трафик под HTTPS, поэтому его легче обнаружить, чем Trojan или VLESS+Reality.</li>
+        </ul>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 4. Trojan -->
+    <!-- ============================================================ -->
+    <div class="protocol-card">
+        <div class="protocol-header">
+            <h3>Trojan</h3>
+            <span class="badge green">Маскировка</span>
+            <span class="badge blue">HTTPS-трафик</span>
+        </div>
+        <p>
+            <strong>Trojan</strong> — это протокол, который <strong>маскирует ваш трафик под обычный HTTPS</strong>. 
+            Он работает через TLS и выглядит для цензора как обычное посещение веб-сайта. 
+            Это один из самых устойчивых протоколов к DPI (глубокой инспекции пакетов).
+        </p>
+        <ul>
+            <li><strong>Шифрование:</strong> использует TLS (как у обычного сайта), поэтому трафик зашифрован и неотличим от веб-серфинга.</li>
+            <li><strong>Скорость:</strong> высокая, сравнимая с VLESS+WS.</li>
+            <li><strong>Когда использовать:</strong> если вы живёте в стране с агрессивной блокировкой (например, Китай, Россия, Иран).</li>
+            <li><strong>Где встречается:</strong> Xray, Sing-box, Trojan-Go, многие клиенты (Hiddify, Nekobox).</li>
+            <li><strong>Нюанс:</strong> для работы Trojan нужен <strong>валидный SSL-сертификат</strong> и веб-сервер (nginx), который будет отдавать заглушку для обычных посетителей.</li>
+        </ul>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- СРАВНИТЕЛЬНАЯ ТАБЛИЦА -->
+    <!-- ============================================================ -->
+    <h2>Что выбрать?</h2>
+    <div class="comparison-box">
+        <h3>Сравнение протоколов</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Протокол</th>
+                    <th>Шифрование</th>
+                    <th>Маскировка под HTTPS</th>
+                    <th>Скорость</th>
+                    <th>Сложность настройки</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>VLESS</strong></td>
+                    <td>Нет (нужен внешний TLS)</td>
+                    <td>Да (с Reality)</td>
+                    <td>⭐⭐⭐⭐⭐</td>
+                    <td>Средняя</td>
+                </tr>
+                <tr>
+                    <td><strong>VMess</strong></td>
+                    <td>Да (AES/ChaCha20)</td>
+                    <td>Нет</td>
+                    <td>⭐⭐⭐⭐</td>
+                    <td>Низкая</td>
+                </tr>
+                <tr>
+                    <td><strong>Shadowsocks</strong></td>
+                    <td>Да (AES/ChaCha20)</td>
+                    <td>Нет</td>
+                    <td>⭐⭐⭐⭐⭐</td>
+                    <td>Низкая</td>
+                </tr>
+                <tr>
+                    <td><strong>Trojan</strong></td>
+                    <td>Да (TLS)</td>
+                    <td>Да</td>
+                    <td>⭐⭐⭐⭐</td>
+                    <td>Высокая</td>
+                </tr>
+            </tbody>
+        </table>
+        <p style="margin-top: 1rem; font-size: 0.95rem; color: #475569;">
+            ⚡ <strong>Совет:</strong> для обычного пользователя лучший выбор — <strong>VLESS + Reality</strong> (быстро и надёжно) 
+            или <strong>Trojan</strong> (отличная маскировка). Если нужна простота — берите <strong>VMess</strong> или <strong>Shadowsocks</strong>.
+        </p>
+    </div>
+
+    <!-- БЛОК "А ЧТО НАСЧЁТ OPENVPN И WIREGUARD?" -->
+    <div style="background: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0; padding: 1.8rem 2rem; margin: 2.5rem 0;">
+        <h3 style="margin-top: 0;">А что насчёт OpenVPN и WireGuard?</h3>
+        <p>
+            Эти протоколы мы не включили в эту главу, потому что они работают на другом уровне. 
+            OpenVPN и WireGuard создают <strong>виртуальную сетевую карту</strong> и перенаправляют <em>весь</em> трафик устройства. 
+            А VLESS, VMess, Shadowsocks и Trojan — это <strong>транспортные прокси</strong>, которые работают на уровне приложений.
+        </p>
+        <p>
+            Если хотите <strong>скрыть факт использования VPN</strong> — выбирайте Trojan или VLESS+Reality. 
+            Если вам нужна <strong>стабильность и скорость</strong> для игр или потокового видео — присмотритесь к WireGuard (он есть в отдельной главе).
+        </p>
+    </div>
+
+    <!-- ПОДВАЛ -->
+    <footer class="footer">
+        <span>© 2026 · VPN для самых маленьких</span>
+        <span>Сделано для тех, кто хочет разобраться</span>
+    </footer>
+
+</div>
+
+</body>
+</html>
